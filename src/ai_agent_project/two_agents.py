@@ -114,7 +114,9 @@ def main():
         logger.info(f"Query: {query}")
         # Initialize agents
         execute_groq_agent(query)
-        # openai_agent_response = execute_openai_agent(query)
+        logger.info("Groq agent analysis complete and started OpenAI agent analysis")
+        execute_openai_agent(query)
+        logger.info("OpenAI agent analysis complete")
 
         logger.info("Stock analysis completed successfully")
         return 0

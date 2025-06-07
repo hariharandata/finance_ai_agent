@@ -137,11 +137,6 @@ python src/two_agents.py
    ```
 To know the further information about the executuon check the Makefile
 
-### Running Tests
-
-```bash
-pytest tests/
-```
 
 
 ## Contributing

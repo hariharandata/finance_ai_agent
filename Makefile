@@ -22,7 +22,7 @@ $(VENV_DIR)/bin/activate:
 	fi
 	@echo "📦 Installing required dependencies: phidata, yfinance, openai, groq"
 	@$(PIP) install --upgrade pip
-	@$(PIP) install phidata yfinance openai groq
+	@$(PIP) install phidata yfinance openai groq duckduckgo-search 'fastapi[standard]' sqlalchemy
 	@echo "📦 Installing dev tools: ruff, black, pytest"
 	@$(PIP) install black ruff pytest
 
