@@ -3,15 +3,19 @@ name = "ai_agent_project"
 version = "0.1.0"
 description = "Comparison of the free open source available LLM model and OPENAI's paid LLM model for the AI agentic development"
 authors = ["hariharan gopinath"]
+packages = [
+    { include = "ai_agent_project", from = "src" }
+]
+include = ["src/ai_agent_project/utils/*"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 pytest = "^8.3.4"
 ruff = "^0.4.4"
-phi = "^2.3.0"
+phi = "^0.6.7"  # Latest available version
 yfinance = "^0.2.37"
 groq = "^0.4.0"
-duckduckgo = "^3.8.3"
+duckduckgo-search = "^4.1.1"  # Modern, maintained alternative to duckduckgo
 python-dotenv = "^1.0.0"
 
 [build-system]

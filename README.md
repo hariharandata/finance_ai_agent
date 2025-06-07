@@ -17,7 +17,7 @@ The basic building block of agentic systems is an LLM enhanced with augmentation
 In this project, the usage of single agent and multi-agent team is compared. In the single agent case, the agent is using the Yahoo Finance tools to retrieve information from the Yahoo Finance API provided as a inbuild function from the PHI data and provide a response according to the user query about the stock provided by the user. In the multi-agent case, the one agent is using the tools to retrieve information from the Yahoo Finance API and another agent is using the tools to latest web information from the duckduckgo API and provide a response of the latest web information about the stock provided by the user.
 
 
-![Multi Agent Architecture](src/utils/images/multi_agent.png)
+![Multi Agent Architecture](src/utils/images/agent_call_image.png)
 
 As together, we make this as LLM enhanced agentic method to retrieve information from the Yahoo Finance API and provide a response of the latest web information about the stock provided by the user. But this is not the end of the story. As said in this block post [Anthropic - Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)*, we can make this as a autonomous agent to retrieve information from the Yahoo Finance API and provide a response of the latest web information about the stock provided by the user and connecting to the appropriate stock broker to place the order when the certain conditions are met. This make a complete autonomous agent for the stock information and trading but there should be a human in the loop to watch this process as it's still in the developemnt phase.
 ## Project Structure
@@ -35,6 +35,7 @@ ai_agent_project/
 │   └── utils/
 │       ├── __init__.py
 │       └── logger.py       # Logging configuration
+│       └── images/         # Images for documentation
 └── responses/             # Directory for agent responses (if saved manually)
 ```
 
@@ -43,7 +44,6 @@ ai_agent_project/
 ### Prerequisites
 
 - Python 3.10+
-- Docker and Docker Compose (for containerized deployment)
 - API keys for:
   - Groq
   - OpenAI
@@ -138,9 +138,6 @@ python src/two_agents.py
 pytest tests/
 ```
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
@@ -150,4 +147,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-Comparsion of the free open source available LLm model and OPENAI's paid LLM model for the ai agentic development
+Comparsion of the free open source available LLM model and OPENAI's paid LLM model for the ai agentic development
