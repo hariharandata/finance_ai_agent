@@ -1,0 +1,38 @@
+[tool.ruff]
+# Linting rules to apply
+select = ["E", "F", "B", "I", "UP", "C90", "SIM"]
+ignore = ["E501", "B008"]  # Line too long & function call as default arg (if needed)
+
+# Target Python version (e.g. 3.10, 3.11, etc.)
+target-version = "py311"
+
+# Max line length (Black-compatible)
+line-length = 88
+
+# Only lint these directories (common in Docker/Python apps)
+src = ["src", "tests"]
+
+# Exclude virtualenvs, cache dirs, etc.
+exclude = [
+    ".venv",
+    "build",
+    "dist",
+    "__pycache__",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".git",
+    ".tox",
+]
+
+# Enable Ruff's Black-compatible formatter (optional, but useful)
+[tool.ruff.format]
+quote-style = "double"
+skip-magic-trailing-comma = false
+indent-style = "space"
+line-ending = "lf"
+
+# Import sorting config
+[tool.ruff.isort]
+known-first-party = ["src"]
+combine-as-imports = true
+force-single-line = false
