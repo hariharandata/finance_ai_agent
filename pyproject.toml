@@ -29,9 +29,11 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-select = ["E", "F", "B", "I", "UP", "C90", "SIM"]
-ignore = ["E501", "B008"]  # Line too long & function call as default arg
 target-version = "py311"
 line-length = 100
 src = ["src", "tests"]
 exclude = [".venv", "build", "dist", "__pycache__", ".mypy_cache", ".pytest_cache"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP", "C90", "SIM"]
+ignore = ["E501", "B008"]

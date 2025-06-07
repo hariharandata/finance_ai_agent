@@ -121,16 +121,21 @@ python src/two_agents.py
 
 ### Setting Up Development Environment
 
-1. Create and activate a virtual environment:
+1. Create and activate a virtual environment and install dependencies:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+   make install
    ```
 
-2. Install dependencies:
+2. Run the single agent script:
    ```bash
-   pip install -r requirements.txt
+   make single_agent
    ```
+
+3. Run the multi-agent script:
+   ```bash
+   make two_agents
+   ```
+To know the further information about the executuon check the Makefile
 
 ### Running Tests
 
