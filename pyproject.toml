@@ -1,47 +1,37 @@
 [tool.poetry]
 name = "ai_agent_project"
 version = "0.1.0"
-description = "Comparison of the free open source available LLM model and OPENAI's paid LLM model for the AI agentic development"
-authors = ["hariharan gopinath"]
+description = "Comparison of free open-source LLMs and OpenAI's paid LLM for agentic AI development"
+authors = ["Hariharan Gopinath"]
+readme = "README.md"
 packages = [
     { include = "ai_agent_project", from = "src" }
 ]
-include = ["src/ai_agent_project/utils/*"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-pytest = "^8.3.4"
-ruff = "^0.4.4"
-phi = "^0.6.7"  # Latest available version
 yfinance = "^0.2.37"
 groq = "^0.4.0"
-duckduckgo-search = "^4.1.1"  # Modern, maintained alternative to duckduckgo
+duckduckgo-search = ">=4.5.0,<5.0.0"
 python-dotenv = "^1.0.0"
+httpx = "^0.28.1"
+pydantic = "^2.11.5"
+phi = ">=0.6.7,<0.7.0"
+openai = "^1.52.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+ruff = "^0.4.10"
+black = "^24.4.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-# Linting rules to apply
 select = ["E", "F", "B", "I", "UP", "C90", "SIM"]
 ignore = ["E501", "B008"]  # Line too long & function call as default arg
-
-# Target Python version
 target-version = "py311"
-
-# Max line length
 line-length = 100
-
-# Files and directories to check
 src = ["src", "tests"]
-
-# Exclude patterns
-exclude = [
-    ".venv",
-    "build",
-    "dist",
-    "__pycache__",
-    ".mypy_cache",
-    ".pytest_cache"
-]
+exclude = [".venv", "build", "dist", "__pycache__", ".mypy_cache", ".pytest_cache"]
