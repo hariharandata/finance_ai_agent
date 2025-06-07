@@ -11,11 +11,11 @@ cookiecutter:
 
 # Run Ruff linting
 lint:
-	ruff check src tests
+	ruff check
 
 # Auto-fix lint issues
 lint-fix:
-	ruff check src tests --fix
+	ruff check --fix
 
 # Format code with Black
 format:

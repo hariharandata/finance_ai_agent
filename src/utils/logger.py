@@ -1,26 +1,24 @@
 import logging
 import logging.handlers
 import sys
-import os
 from pathlib import Path
-from typing import Optional
 
 
 def ensure_logs_dir(logs_dir: Path = None) -> Path:
     """Ensure the logs directory exists and return its path."""
     if logs_dir is None:
-        logs_dir = Path(__file__).parent.parent.parent / 'logs'
+        logs_dir = Path(__file__).parent.parent.parent / "logs"
     logs_dir.mkdir(parents=True, exist_ok=True)
     return logs_dir
 
 
 def setup_logger(
     name: str,
-    log_file: Optional[str] = None,
+    log_file: str | None = None,
     log_level_console: int = logging.INFO,
     log_level_file: int = logging.DEBUG,
     max_bytes: int = 10 * 1024 * 1024,  # 10MB
-    backup_count: int = 5
+    backup_count: int = 5,
 ) -> logging.Logger:
     """
     Set up a logger with console and optional rotating file handlers.
@@ -45,8 +43,8 @@ def setup_logger(
 
     # Formatter
     formatter = logging.Formatter(
-        fmt='%(asctime)s - %(name)s - %(levelname)-8s - %(filename)s:%(lineno)d - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        fmt="%(asctime)s - %(name)s - %(levelname)-8s - %(filename)s:%(lineno)d - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
     # Console Handler
@@ -59,14 +57,14 @@ def setup_logger(
     if log_file:
         logs_dir = ensure_logs_dir()
         log_path = logs_dir / log_file
-        
+
         try:
             file_handler = logging.handlers.RotatingFileHandler(
                 filename=log_path,
                 maxBytes=max_bytes,
                 backupCount=backup_count,
-                encoding='utf-8',
-                mode='a'
+                encoding="utf-8",
+                mode="a",
             )
             file_handler.setLevel(log_level_file)
             file_handler.setFormatter(formatter)
@@ -84,13 +82,13 @@ def setup_logger(
 def get_logger(name: str = None) -> logging.Logger:
     """
     Get a configured logger instance.
-    
+
     Args:
         name (str, optional): Name of the logger. If None, uses the root package name.
-        
+
     Returns:
         logging.Logger: Configured logger instance.
     """
     if name is None:
-        name = __name__.split('.')[0]
+        name = "ai_agent"
     return setup_logger(name, f"{name}.log")

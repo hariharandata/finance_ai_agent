@@ -1,21 +1,43 @@
 [tool.poetry]
 name = "ai_agent_project"
 version = "0.1.0"
-description = "Comparsion of the free open source available LLm model and OPENAI's paid LLM model for the ai agentic development"
+description = "Comparison of the free open source available LLM model and OPENAI's paid LLM model for the AI agentic development"
 authors = ["hariharan gopinath"]
-
-
-[tool.ruff]
-line-length = 100
-select = ["E", "F", "W", "I"] # Example rule sets
-# Add other configurations as needed
-
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 pytest = "^8.3.4"
-ruff = "^0.4.4" # Using a recent version of Ruff
-phi
-yfinance
-groq
+ruff = "^0.4.4"
+phi = "^2.3.0"
+yfinance = "^0.2.37"
+groq = "^0.4.0"
+duckduckgo = "^3.8.3"
+python-dotenv = "^1.0.0"
 
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Linting rules to apply
+select = ["E", "F", "B", "I", "UP", "C90", "SIM"]
+ignore = ["E501", "B008"]  # Line too long & function call as default arg
+
+# Target Python version
+target-version = "py311"
+
+# Max line length
+line-length = 100
+
+# Files and directories to check
+src = ["src", "tests"]
+
+# Exclude patterns
+exclude = [
+    ".venv",
+    "build",
+    "dist",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache"
+]
