@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "ai_agent_project"
+name = "ai_agent"
 version = "0.1.0"
 description = "Comparison of free open-source LLMs and OpenAI's paid LLM for agentic AI development"
 authors = ["Hariharan Gopinath"]
 readme = "README.md"
 packages = [
-    { include = "ai_agent_project", from = "src" }
+    { include = "ai_agent", from = "src" }
 ]
 
 [tool.poetry.dependencies]

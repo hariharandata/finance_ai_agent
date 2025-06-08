@@ -55,9 +55,9 @@ clean:
 	rm -rf $(OUTPUT_DIR)
 
 single_agent:
-	$(PYTHON) src/ai_agent_project/single_agent.py
+	$(PYTHON) src/ai_agent/single_agent.py
 
 two_agents:
-	$(PYTHON) src/ai_agent_project/two_agents.py
+	$(PYTHON) src/ai_agent/two_agents.py
 
 .PHONY: cookiecutter install lint lint-fix format test docker-build docker-run clean

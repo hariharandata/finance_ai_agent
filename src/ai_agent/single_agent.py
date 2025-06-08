@@ -21,6 +21,9 @@ load_dotenv()
 logger.info("Environment variables loaded")
 
 
+#Stock to analyze
+stocks = "TSLA and NVIDIA"
+
 def setup_groq_agent(tools):
     """Initialize and return the Groq agent with YFinance tools."""
     try:
@@ -115,9 +118,6 @@ def main():
         # Initialize agents
         groq_agent = setup_groq_agent(tools)
         openai_agent = setup_openai_agent(tools)
-
-        # Define stocks to analyze
-        stocks = "TSLA and NVIDIA"
 
         # Run analysis with both agents
         logger.info("Running Groq agent analysis")

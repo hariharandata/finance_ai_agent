@@ -1,6 +1,34 @@
 # Finance AI Agent Project
+## Project Overview
+This project s a great example of an LLM-powered agentic system in a specific domain (finance).
+A multi-agent AI system integrating open-source and OpenAI LLMs to analyze financial data, aggregate news, and deliver actionable insights using APIs like YFinance and DuckDuckGo.
 
 A Python-based project that compares AI agents from different providers (Groq and OpenAI) for financial analysis tasks. The project includes two main scripts: one for single-agent analysis and another for multi-agent team collaboration.
+
+### Key Features:
+- Multi-agent setup – likely distinct components or personas (e.g., a financial analyst agent, news summarizer agent, etc.)
+- Tool use – fetches external data (e.g., stock prices, news) using APIs
+- Reasoning & decision-making – probably uses LLMs to draw conclusions or generate insights from combined data
+- Natural language interface – possibly allows querying or explanation in human-readable form
+
+### Is it an AI Agent?
+
+Yes. Each part (e.g., fetching stock data, summarizing news, generating insights) acts like an AI agent—a function with a clear task.
+
+### Is it Agentic AI?
+
+Partially, yes. Here's why:
+
+| Agentic Trait        | Present in Repo? | Notes |
+|----------------------|------------------|-------|
+| Tool integration     | ✅ Yes           | Uses YFinance, news APIs |
+| Reasoning           | ✅ Yes           | LLM used to interpret and combine signals |
+| Planning            | 🟡 Partial       | Might be fixed logic; true planning would require dynamic task chaining |
+| Memory/State        | ❌ No            | Likely stateless (no long-term memory of past runs) |
+| Delegation/Subagents| 🟡 Partial       | If multi-agent is hard-coded, not dynamic delegation |
+| Autonomy            | ❌ No            | Needs user to trigger execution (not persistent or self-initiating) |
+
+Finance AI Agent is a strong example of a modular, task-focused AI agent system with some agentic traits. It doesn’t yet reach full Agentic AI status (e.g., self-planning, persistent memory, dynamic agent coordination), but it’s a practical and well-scoped implementation of agent-based thinking applied to real-world data.
 
 
 ## Theory
@@ -23,20 +51,21 @@ As together, we make this as LLM enhanced agentic method to retrieve information
 ## Project Structure
 
 ```
-ai_agent_project/
+ai_agent/
 ├── .env                    # Environment variables (not in version control)
 ├── .gitignore
-├── pyproject.toml          # Project dependencies
-├── requirements.txt        # Python dependencies
+├── pyproject.toml          # Project dependencies and configuration
+├── Makefile               # Make commands for common tasks
+├── README.md              # Project documentation
 ├── src/
-│   ├── __init__.py
-│   ├── single_agent.py     # Single agent implementation
-│   ├── two_agents.py       # Multi-agent team implementation
-│   └── utils/
+│   └── ai_agent/
 │       ├── __init__.py
-│       └── logger.py       # Logging configuration
-│       └── images/         # Images for documentation
-└── responses/             # Directory for agent responses (if saved manually)
+│       ├── single_agent.py     # Single agent implementation
+│       ├── two_agents.py       # Multi-agent team implementation
+│       └── utils/
+│           ├── __init__.py
+│           └── logger.py       # Logging configuration
+└──tests/                 # Unit and integration tests
 ```
 
 ## Setup Instructions
@@ -47,6 +76,7 @@ ai_agent_project/
 - API keys for:
   - Groq
   - OpenAI
+- Make sure you have the required dependencies installed by running `make install`
 
 ### Environment Variables
 
@@ -76,7 +106,7 @@ A simple implementation that uses either Groq or OpenAI's model to analyze stock
 
 **Usage:**
 ```bash
-python src/single_agent.py
+python src/ai_agent/single_agent.py
 ```
 
 ### Multi-Agent Team (`two_agents.py`)
@@ -93,7 +123,7 @@ Implements a team of specialized agents working together:
 
 **Usage:**
 ```bash
-python src/two_agents.py
+python src/ai_agent/two_agents.py
 ```
 
 ## API Key Management
@@ -136,7 +166,7 @@ python src/two_agents.py
    make two_agents
    ```
 To know the further information about the executuon check the Makefile
-
+If you need to customize the stocks to analyze, you can change the stocks variable in the single_agent.py and two_agents.py files at the top.
 
 
 ## Contributing

@@ -21,6 +21,9 @@ logger = get_logger("ai_agent")
 load_dotenv()
 logger.info("Environment variables loaded")
 
+#Stock to analyze
+stocks = "TSLA and NVIDIA"
+
 
 def agent_team(model) -> list:
     try:
@@ -109,7 +112,6 @@ def main():
     """Main function to run the stock analysis."""
     try:
         logger.info("Starting stock analysis")
-        stocks = "TSLA and NVIDIA"
         query = f"""Summarize analyst recommendations and share the latest news for companies with their current stock price: {stocks}"""
         logger.info(f"Query: {query}")
         # Initialize agents
