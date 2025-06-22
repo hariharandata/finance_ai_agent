@@ -1,15 +1,15 @@
-# Finance AI Agent Project
+# Finance AI Agent Project (WIP- Work in progress)
 ## Project Overview
-This project s a great example of an LLM-powered agentic system in a specific domain (finance).
+This project is a great example of an LLM-powered agentic system in a specific domain (finance).
 A multi-agent AI system integrating open-source and OpenAI LLMs to analyze financial data, aggregate news, and deliver actionable insights using APIs like YFinance and DuckDuckGo.
 
-A Python-based project that compares AI agents from different providers (Groq and OpenAI) for financial analysis tasks. The project includes two main scripts: one for single-agent analysis and another for multi-agent team collaboration.
+A Python-based project that compares AI agents from different providers (Groq and OpenAI) for financial analysis tasks. The project has been refactored to be configuration-driven, using a central markdown file to manage prompts, instructions, and target stocks. It includes two main scripts: one for single-agent analysis and another for multi-agent team collaboration.
 
 ### Key Features:
-- Multi-agent setup – likely distinct components or personas (e.g., a financial analyst agent, news summarizer agent, etc.)
-- Tool use – fetches external data (e.g., stock prices, news) using APIs
-- Reasoning & decision-making – probably uses LLMs to draw conclusions or generate insights from combined data
-- Natural language interface – possibly allows querying or explanation in human-readable form
+- Multi-agent setup – distinct components for financial analysis and web search.
+- Tool use – fetches external data (e.g., stock prices, news) using YFinance and DuckDuckGo APIs.
+- Reasoning & decision-making – uses LLMs to interpret and combine data signals.
+- **Configuration-Driven**: All prompts, instructions, and target stocks are managed in a central `prompts/instructions.md` file, allowing for easy customization without code changes.
 
 ### Is it an AI Agent?
 
@@ -23,16 +23,16 @@ Partially, yes. Here's why:
 |----------------------|------------------|-------|
 | Tool integration     | ✅ Yes           | Uses YFinance, news APIs |
 | Reasoning           | ✅ Yes           | LLM used to interpret and combine signals |
-| Planning            | 🟡 Partial       | Might be fixed logic; true planning would require dynamic task chaining |
-| Memory/State        | ❌ No            | Likely stateless (no long-term memory of past runs) |
-| Delegation/Subagents| 🟡 Partial       | If multi-agent is hard-coded, not dynamic delegation |
+| Planning            | 🟡 Partial       | Logic is based on provided prompts; no dynamic task chaining |
+| Memory/State        | ❌ No            | Stateless (no long-term memory of past runs) |
+| Delegation/Subagents| ✅ Yes           | The `two_agents.py` script delegates tasks to a Finance Agent and a Web Agent. |
 | Autonomy            | ❌ No            | Needs user to trigger execution (not persistent or self-initiating) |
 
-Finance AI Agent is a strong example of a modular, task-focused AI agent system with some agentic traits. It doesn’t yet reach full Agentic AI status (e.g., self-planning, persistent memory, dynamic agent coordination), but it’s a practical and well-scoped implementation of agent-based thinking applied to real-world data.
+Finance AI Agent is a strong example of a modular, task-focused AI agent system with some agentic traits. It doesn't yet reach full Agentic AI status (e.g., self-planning, persistent memory, dynamic agent coordination), but it's a practical and well-scoped implementation of agent-based thinking applied to real-world data.
 
 
 ## Theory
-In this theory section, we’ll explore the common patterns for agentic systems. We'll start with our foundational building block—the augmented LLM—and progressively increase complexity, from simple compositional workflows to  autonomous agents.
+In this theory section, we'll explore the common patterns for agentic systems. We'll start with our foundational building block—the augmented LLM—and progressively increase complexity, from simple compositional workflows to  autonomous agents.
 
 ![Augmented LLM Architecture](src/utils/images/augumented_LLM.png)
 
@@ -42,7 +42,7 @@ In this theory section, we’ll explore the common patterns for agentic systems.
 
 The basic building block of agentic systems is an LLM enhanced with augmentations such as retrieval, tools, and memory. Our current models can actively use the augmentation of using the tools and determining what information to retain. Further, these tools act as a independent agents and can work in parallel to each other to retrieve information and provide a response.
 
-In this project, the usage of single agent and multi-agent team is compared. In the single agent case, the agent is using the Yahoo Finance tools to retrieve information from the Yahoo Finance API provided as a inbuild function from the PHI data and provide a response according to the user query about the stock provided by the user. In the multi-agent case, the one agent is using the tools to retrieve information from the Yahoo Finance API and another agent is using the tools to latest web information from the duckduckgo API and provide a response of the latest web information about the stock provided by the user.
+In this project, the usage of single agent and multi-agent team is compared. In the single agent case, the agent is using the Yahoo Finance tools to retrieve information from the Yahoo Finance API. In the multi-agent case, one agent uses Yahoo Finance tools while another agent uses DuckDuckGo for the latest web information.
 
 
 ![Multi Agent Architecture](src/utils/images/agent_call_image.png)
@@ -58,13 +58,16 @@ ai_agent/
 ├── Makefile               # Make commands for common tasks
 ├── README.md              # Project documentation
 ├── src/
-│   └── ai_agent/
+│   ├── ai_agent/
+│   │   ├── __init__.py
+│   │   ├── single_agent.py     # Single agent implementation
+│   │   └── two_agents.py       # Multi-agent team implementation
+│   ├── prompts/
+│   │   └── instructions.md # Central configuration for prompts and stocks
+│   └── utils/
 │       ├── __init__.py
-│       ├── single_agent.py     # Single agent implementation
-│       ├── two_agents.py       # Multi-agent team implementation
-│       └── utils/
-│           ├── __init__.py
-│           └── logger.py       # Logging configuration
+│       ├── logger.py       # Logging configuration
+│       └── prompt_loader.py # Utility to load prompts from markdown
 └──tests/                 # Unit and integration tests
 ```
 
@@ -92,6 +95,14 @@ LOG_LEVEL=INFO
 LOG_FILE=ai_agent.log
 ```
 
+### Configuration File
+
+All runtime behavior is controlled by `src/prompts/instructions.md`. This file uses markdown headers to define different configuration sections.
+
+- `# stocks`: The company tickers to analyze.
+- `# instructions`: The system prompt/instructions for the AI agent.
+- `# query`: The main user query template. Use `{stocks}` as a placeholder.
+
 ## Available Scripts
 
 ### Single Agent Analysis (`single_agent.py`)
@@ -103,7 +114,7 @@ A simple implementation that uses either Groq or OpenAI's model to analyze stock
 - Supports both Groq and OpenAI models
 - Basic financial analysis using yfinance
 - Response logging and saving
-
+A simple implementation that uses a single agent (either Groq or OpenAI) to analyze stocks based on the configuration in `instructions.md`.
 **Usage:**
 ```bash
 python src/ai_agent/single_agent.py
@@ -120,7 +131,7 @@ Implements a team of specialized agents working together:
 - Collaborative problem solving
 - Integrated web search and financial analysis
 - Response logging and saving
-
+A simple implementation that uses a two agent (either Groq or OpenAI) to analyze stocks based on the configuration in `instructions.md`.
 **Usage:**
 ```bash
 python src/ai_agent/two_agents.py
@@ -151,15 +162,21 @@ python src/ai_agent/two_agents.py
 
 ### Setting Up Development Environment
 
-1. Create and activate a virtual environment and install dependencies:
-   ```bash
-   make install
-   ```
+1.  Create and activate a virtual environment and install dependencies:
+    ```bash
+    make install
+    ```
 
-2. Run the single agent script:
-   ```bash
-   make single_agent
-   ```
+### Customizing the Analysis
+
+To change the stocks, prompts, or queries, **edit the `src/prompts/instructions.md` file**. You no longer need to modify the Python scripts.
+
+### Running the Agents
+
+1.  Run the single agent script:
+    ```bash
+    make single_agent
+    ```
 
 3. Run the multi-agent script:
    ```bash

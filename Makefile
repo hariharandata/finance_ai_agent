@@ -13,18 +13,18 @@ cookiecutter:
 	cookiecutter $(TEMPLATE_DIR) --output-dir $(OUTPUT_DIR)
 
 # Set up virtual environment and install required tools
-install: $(VENV_DIR)/bin/activate
+install: $(VENV_DIR)/.installed
 
-$(VENV_DIR)/bin/activate:
+$(VENV_DIR)/.installed:
 	@if [ ! -d "$(VENV_DIR)" ]; then \
 		echo "🛠️ Creating virtual environment at $(VENV_DIR)"; \
 		python3 -m venv $(VENV_DIR); \
 	fi
-	@echo "📦 Installing required dependencies: phidata, yfinance, openai, groq"
+	@echo "📦 Installing required dependencies..."
 	@$(PIP) install --upgrade pip
 	@$(PIP) install phidata yfinance openai groq duckduckgo-search 'fastapi[standard]' sqlalchemy
-	@echo "📦 Installing dev tools: ruff, black, pytest"
 	@$(PIP) install black ruff pytest
+	@touch $(VENV_DIR)/.installed
 
 # Run Ruff linting
 lint:

@@ -8,14 +8,17 @@ from phi.model.openai import OpenAIChat
 from phi.tools.duckduckgo import DuckDuckGo
 from phi.tools.yfinance import YFinanceTools
 
+
+
 # Add parent directory to path to allow imports from utils
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Import logger after path is set
 from utils.logger import get_logger
+from utils.prompt_loader import load_markdown_sections
 
 # Setup logger
-logger = get_logger("ai_agent")
+logger = get_logger("two_agents")
 
 # Load environment variables
 load_dotenv()
@@ -25,14 +28,14 @@ logger.info("Environment variables loaded")
 stocks = "TSLA and NVIDIA"
 
 
-def agent_team(model) -> list:
+def agent_team(model, prompts) -> list:
     try:
         logger.info("Initializing agent team")
         web_agent = Agent(
             name="Web Agent",
             model=model,
             tools=[DuckDuckGo()],
-            instructions=["Always include sources"],
+            instructions=prompts["web_agent_instructions"].splitlines(),
             show_tool_calls=True,
             markdown=True,
         )
@@ -46,7 +49,7 @@ def agent_team(model) -> list:
                     stock_price=True, analyst_recommendations=True, company_info=True
                 )
             ],
-            instructions=["Use tables to display data"],
+            instructions=prompts["finance_agent_instructions"].splitlines(),
             show_tool_calls=True,
             markdown=True,
         )
@@ -57,73 +60,67 @@ def agent_team(model) -> list:
         raise
 
 
-def execute_groq_agent(query):
-    """Initialize and return the Groq agent with YFinance tools."""
+def execute_agent(prompts, agent_type="groq"):
+    """
+    Initializes and executes a financial analysis agent.
+
+    Args:
+        query (str): The query for the agent to execute.
+        agent_type (str): The type of agent to use ('groq' or 'openai').
+
+    Returns:
+        The response from the agent.
+    """
     try:
-        logger.info("Initializing Groq model")
-        groq_model = Groq(id="llama-3.3-70b-versatile")
-        logger.debug("Groq model initialized successfully")
-        team = agent_team(groq_model)
-        logger.info("Creating Groq agent")
+        logger.info("Initializing %s model", agent_type)
+        if agent_type == "groq":
+            model = Groq(id="llama-3.3-70b-versatile")
+        elif agent_type == "openai":
+            model = OpenAIChat(id="gpt-4o")
+        else:
+            raise ValueError(f"Unsupported agent type: {agent_type}")
+
+        logger.debug("%s model initialized successfully", agent_type)
+
+        team = agent_team(model, prompts)
+
+        logger.info("Creating %s agent", agent_type)
         agent = Agent(
-            model=groq_model,
+            model=model,
             team=team,
-            instructions=["Always include sources", "Use tables to display data"],
             show_tool_calls=True,
             markdown=True,
         )
-        logger.info("Groq agent setup complete")
-
+        logger.info("%s agent setup complete", agent_type)
+        query = prompts["query"].format(stocks=prompts["stocks"])
         response = agent.print_response(query)
-
         return response
     except Exception as e:
-        logger.error(f"Failed to initialize Groq agent: {e}", exc_info=True)
-        raise
-
-
-def execute_openai_agent(query):
-    """Initialize and return the OpenAI agent."""
-    try:
-        logger.info("Initializing OpenAI model")
-        openai_model = OpenAIChat(id="gpt-4o")
-        logger.debug("OpenAI model initialized successfully")
-        team = agent_team(openai_model)
-        logger.info("Creating OpenAI agent")
-        agent = Agent(
-            model=openai_model,
-            team=team,
-            instructions=["Use tables to display data", "Always include sources"],
-            # debug_mode=True,
-            show_tool_calls=True,
-            markdown=True,
-        )
-        logger.info("OpenAI agent setup complete")
-
-        response = agent.print_response(query)
-
-        return response
-    except Exception as e:
-        logger.error(f"Failed to initialize OpenAI agent: {e}", exc_info=True)
+        logger.error("Failed to execute %s agent: %s", agent_type, e, exc_info=True)
         raise
 
 
 def main():
     """Main function to run the stock analysis."""
     try:
+        PROMPTS_FILE = Path(__file__).parent.parent / "prompts" / "instructions.md"
+        prompts = load_markdown_sections(str(PROMPTS_FILE))
+        query = prompts["query"]
+        logger.info("Query: %s", query)
         logger.info("Starting stock analysis")
-        query = f"""Summarize analyst recommendations and share the latest news for companies with their current stock price: {stocks}"""
-        logger.info(f"Query: {query}")
-        # Initialize agents
-        execute_groq_agent(query)
-        logger.info("Groq agent analysis complete and started OpenAI agent analysis")
-        execute_openai_agent(query)
-        logger.info("OpenAI agent analysis complete")
+
+        # # Run analysis with Groq agent
+        # logger.info("--- Running Groq Agent ---")
+        # execute_agent(prompts, agent_type="groq")
+        
+        # Run analysis with OpenAI agent
+        logger.info("--- Running OpenAI Agent ---")
+        execute_agent(prompts, agent_type="openai")
 
         logger.info("Stock analysis completed successfully")
         return 0
     except Exception as e:
-        logger.critical(f"Fatal error in main: {e}", exc_info=True)
+        logger.critical("Fatal error in main: %s", e, exc_info=True)
         return 1
     finally:
         logger.info("Application shutdown")

@@ -2,9 +2,10 @@ import logging
 import logging.handlers
 import sys
 from pathlib import Path
+from typing import Optional
 
 
-def ensure_logs_dir(logs_dir: Path = None) -> Path:
+def ensure_logs_dir(logs_dir: Optional[Path] = None) -> Path:
     """Ensure the logs directory exists and return its path."""
     if logs_dir is None:
         logs_dir = Path(__file__).parent.parent.parent / "logs"
@@ -69,9 +70,9 @@ def setup_logger(
             file_handler.setLevel(log_level_file)
             file_handler.setFormatter(formatter)
             logger.addHandler(file_handler)
-            logger.debug(f"Log file handler created at: {log_path}")
+            logger.debug("Log file handler created at: %s", log_path)
         except Exception as e:
-            logger.error(f"Failed to create file handler: {e}", exc_info=True)
+            logger.error("Failed to create file handler: %s", e, exc_info=True)
 
     # Prevent logging from propagating to the root logger
     logger.propagate = False
@@ -79,7 +80,7 @@ def setup_logger(
     return logger
 
 
-def get_logger(name: str = None) -> logging.Logger:
+def get_logger(name: Optional[str] = None) -> logging.Logger:
     """
     Get a configured logger instance.
 
